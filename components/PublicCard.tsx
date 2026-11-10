@@ -61,7 +61,6 @@ export function PublicCard({ slug, data }: Props) {
             )}
           </div>
 
-          {/* Acciones */}
           <div className="mt-5 grid grid-cols-3 gap-2 px-4">
             {wa && (
               <a href={wa} target="_blank" className="flex flex-col items-center gap-1 rounded-2xl bg-emerald-500/15 py-3 text-[10px] font-medium text-emerald-300">
@@ -80,7 +79,6 @@ export function PublicCard({ slug, data }: Props) {
             )}
           </div>
 
-          {/* Redes */}
           {d.socials?.length > 0 && (
             <div className="mt-3 flex justify-center gap-2 px-4">
               {d.socials.map((s: any, i: number) => (
@@ -94,7 +92,6 @@ export function PublicCard({ slug, data }: Props) {
             </div>
           )}
 
-          {/* Reseña Google + Waze */}
           <div className="mt-4 space-y-2 px-4">
             {d.reviewUrl && (
               <a href={d.reviewUrl} target="_blank"
@@ -119,16 +116,6 @@ export function PublicCard({ slug, data }: Props) {
             )}
           </div>
 
-          {/* Galería */}
-          {d.gallery?.length > 0 && (
-            <div className="mt-4 grid grid-cols-4 gap-1 px-4">
-              {d.gallery.map((g: string, i: number) => (
-                <img key={i} src={g} alt="" className="aspect-square rounded-xl object-cover ring-1 ring-white/10" />
-              ))}
-            </div>
-          )}
-
-          {/* Compartir + QR */}
           <div className="mt-4 flex items-center gap-3 border-t border-white/5 px-4 py-4">
             <div className="rounded-xl bg-white p-1.5">
               <QRCodeSVG value={publicUrl} size={44} />
@@ -143,14 +130,20 @@ export function PublicCard({ slug, data }: Props) {
             </div>
           </div>
 
-{/* Guardar contacto */}
-<div className="border-t border-white/5 px-4 py-3">
-  <a
-    href="/api/vcard/camila-restrepo"
-    download="camila-restrepo.vcf"
-    className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-accent py-2.5 text-xs font-semibold text-white transition hover:opacity-90"
-  >
-    <UserPlus className="h-3.5 w-3.5" /> Guardar en contactos
-  </a>
-</div>
+          <div className="border-t border-white/5 px-4 py-3">
+            <a
+              href={vcardUrl}
+              download={`${slug}.vcf`}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-brand-500 to-accent py-3 text-xs font-semibold text-white transition hover:opacity-90"
+            >
+              <UserPlus className="h-4 w-4" /> Guardar en mis contactos
+            </a>
+            <p className="mt-1.5 text-center text-[10px] text-white/40">
+              Se agrega automáticamente con todos sus datos
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+  );
 }
