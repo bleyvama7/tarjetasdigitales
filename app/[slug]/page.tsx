@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { notFound } from "next/navigation";
-import { PublicCard } from "@/components/PublicCard";
+import { PublicCard } from "../../components/PublicCard";
 import type { Metadata } from "next";
 
 const anon = createClient(
