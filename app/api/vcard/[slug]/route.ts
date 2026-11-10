@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
-import { buildVCard } from "../../../lib/vcard";
+import { buildVCard } from "../../../../lib/vcard";
 
 export async function GET(
   _req: Request,
