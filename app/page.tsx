@@ -1,4 +1,4 @@
-import DemoCard from "@/components/DemoCard";
+import DemoCard from "../components/DemoCard";
 import {
   Sparkles, Zap, ShieldCheck, Smartphone, QrCode, BarChart3,
   Star, MapPin, MessageCircle, ArrowRight, Check, Nfc,
