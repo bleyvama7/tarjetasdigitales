@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase/client";
+import { createClient } from "../../../lib/supabase/client";
 import { Sparkles, Mail, Lock, User, Loader2 } from "lucide-react";
 import Link from "next/link";
 
