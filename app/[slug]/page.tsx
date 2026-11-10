@@ -16,7 +16,7 @@ export async function generateMetadata({
     .select("data")
     .eq("slug", params.slug)
     .eq("status", "published")
-    .single();
+    .maybeSingle();
 
   if (!card) return { title: "Tarjeta no encontrada" };
 
@@ -38,7 +38,7 @@ export default async function CardPage({ params }: { params: { slug: string } })
     .select("slug, data")
     .eq("slug", params.slug)
     .eq("status", "published")
-    .single();
+    .maybeSingle();
 
   if (!card) notFound();
 
