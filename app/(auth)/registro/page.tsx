@@ -8,7 +8,6 @@ import Link from "next/link";
 
 export default function RegistroPage() {
   const router = useRouter();
-  const supabase = createClient();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -19,6 +18,8 @@ export default function RegistroPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    const supabase = createClient(); // Se conecta solo al hacer clic
 
     // 1. Crear el usuario en Supabase Auth
     const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -34,8 +35,7 @@ export default function RegistroPage() {
 
     // 2. Crear su perfil en la tabla "profiles"
     if (authData.user) {
-      // El primer usuario que se registre será Admin, los demás serán Client
-      const isAdmin = email === "bleyvama@gmail.com"; // Pon aquí tu correo para ser Admin
+      const isAdmin = email === "bleyvama@gmail.com"; // Tu correo de admin
       
       const { error: profileError } = await supabase.from("profiles").insert({
         id: authData.user.id,
@@ -50,7 +50,6 @@ export default function RegistroPage() {
         return;
       }
 
-      // Redirigir al dashboard
       router.push("/dashboard");
       router.refresh();
     }
