@@ -3,6 +3,9 @@ import { notFound } from "next/navigation";
 import { PublicCard } from "../../components/PublicCard";
 import type { Metadata } from "next";
 
+// Esta línea evita que Vercel intente construir la página si la base de datos está vacía
+export const dynamic = "force-dynamic";
+
 const anon = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
