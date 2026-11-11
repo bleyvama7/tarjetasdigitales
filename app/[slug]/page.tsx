@@ -3,18 +3,21 @@ import { notFound } from "next/navigation";
 import { PublicCard } from "../../components/PublicCard";
 import type { Metadata } from "next";
 
-// Esta línea evita que Vercel intente construir la página si la base de datos está vacía
 export const dynamic = "force-dynamic";
 
-const anon = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-);
+// Función auxiliar para crear el cliente SOLO cuando se necesita
+function getSupabaseClient() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+}
 
 export async function generateMetadata({
   params,
 }: { params: { slug: string } }): Promise<Metadata> {
-  const { data: card } = await anon
+  const supabase = getSupabaseClient(); // Se crea aquí dentro
+  const { data: card } = await supabase
     .from("cards")
     .select("data")
     .eq("slug", params.slug)
@@ -36,7 +39,8 @@ export async function generateMetadata({
 }
 
 export default async function CardPage({ params }: { params: { slug: string } }) {
-  const { data: card } = await anon
+  const supabase = getSupabaseClient(); // Se crea aquí dentro
+  const { data: card } = await supabase
     .from("cards")
     .select("slug, data")
     .eq("slug", params.slug)
