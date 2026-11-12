@@ -98,13 +98,12 @@ const faqs = [
 export default function Home() {
   return (
     <main className="relative overflow-hidden">
-      {/* NAV */}
+      {/* NAV (Aquí está tu logo) */}
       <header className="fixed top-0 z-50 w-full border-b border-white/5 bg-ink/70 backdrop-blur-xl">
         <div className="section flex items-center justify-between py-4">
           <a href="#" className="flex items-center gap-2 font-display font-bold">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent">
-              <Sparkles className="h-4 w-4" />
-            </span>
+            {/* Tu logo */}
+            <img src="/logo.png" alt="Logo" className="h-8 w-8 rounded-lg object-contain" />
             Tarjetas Digitales
           </a>
           <nav className="hidden items-center gap-8 text-sm text-white/70 md:flex">
@@ -342,7 +341,7 @@ export default function Home() {
               ¿Tienes otra duda? Escríbenos por WhatsApp y te respondemos en minutos.
             </p>
             <a
-              href="https://wa.me/573000000000?text=Hola,%20quiero%20info%20sobre%20las%20tarjetas%20digitales"
+              href="https://wa.me/573136999315?text=Hola,%20quiero%20info%20sobre%20las%20tarjetas%20digitales"
               className="btn-ghost mt-6 text-xs"
             >
               <MessageCircle className="h-4 w-4" /> Escribir por WhatsApp
@@ -388,18 +387,16 @@ export default function Home() {
       <footer className="border-t border-white/5 py-12">
         <div className="section flex flex-col items-center justify-between gap-6 md:flex-row">
           <div className="flex items-center gap-2 font-display font-bold">
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-accent">
-              <Sparkles className="h-3.5 w-3.5" />
-            </span>
+            <img src="/logo.png" alt="Logo" className="h-7 w-7 rounded-lg object-contain" />
             Tarjetas Digitales
           </div>
           <nav className="flex flex-wrap items-center gap-6 text-xs text-white/50">
             <a href="#">Términos</a>
             <a href="#">Privacidad</a>
             <a href="#">Tratamiento de datos</a>
-            <a href="https://wa.me/573000000000">Contacto</a>
+            <a href="https://wa.me/573136999315">Contacto</a>
           </nav>
-          <p className="text-xs text-white/40">© {new Date().getFullYear()} · tarjetasdigitales.lat</p>
+          <p className="text-xs text-white/40">© {new Date().getFullYear()} · tarjetasdigitales.shop</p>
         </div>
       </footer>
 
