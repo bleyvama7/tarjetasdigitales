@@ -404,7 +404,7 @@ export default function Home() {
 
       {/* FLOATING WHATSAPP */}
       <a
-        href="https://wa.me/573000000000?text=Hola,%20quiero%20mi%20tarjeta%20digital"
+        href="https://wa.me/573136999315?text=Hola,%20quiero%20mi%20tarjeta%20digital"
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Escríbenos por WhatsApp"
