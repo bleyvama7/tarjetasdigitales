@@ -18,14 +18,23 @@ export async function middleware(req: NextRequest) {
   );
 
   const { data: { user } } = await supabase.auth.getUser();
+  const { pathname } = req.nextUrl;
 
-  const protectedPaths = ["/dashboard", "/editor", "/admin"];
-  const isProtected = protectedPaths.some((p) => req.nextUrl.pathname.startsWith(p));
+  // Rutas privadas
+  const isProtectedRoute = pathname.startsWith("/dashboard") || pathname.startsWith("/editor");
+  
+  // Rutas de autenticación
+  const isAuthRoute = pathname === "/login" || pathname === "/registro";
 
-  if (isProtected && !user) {
+  if (isProtectedRoute && !user) {
     const url = req.nextUrl.clone();
     url.pathname = "/login";
-    url.searchParams.set("next", req.nextUrl.pathname);
+    return NextResponse.redirect(url);
+  }
+
+  if (isAuthRoute && user) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/dashboard";
     return NextResponse.redirect(url);
   }
 
@@ -33,5 +42,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/editor/:path*", "/admin/:path*"],
+  matcher: ["/dashboard/:path*", "/editor/:path*", "/login", "/registro"],
 };
