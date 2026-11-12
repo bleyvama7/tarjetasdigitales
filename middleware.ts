@@ -20,30 +20,22 @@ export async function middleware(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   const { pathname } = req.nextUrl;
 
-  // 1. Proteger la ruta /admin (solo para ti)
-  if (pathname.startsWith("/admin")) {
-    if (!user) {
-      const url = req.nextUrl.clone();
-      url.pathname = "/login";
-      return NextResponse.redirect(url);
-    }
-    const { data: profile } = await supabase.from("profiles").select("role").eq("id", user.id).single();
-    if (profile?.role !== "admin") {
-      return NextResponse.redirect(new URL("/dashboard", req.url));
-    }
-    return res;
-  }
+  // Rutas que requieren estar logueado (Dashboard, Editor, Admin)
+  const isProtectedRoute = 
+    pathname.startsWith("/dashboard") || 
+    pathname.startsWith("/editor") || 
+    pathname.startsWith("/admin");
 
-  // 2. Proteger /dashboard y /editor
-  const isProtectedRoute = pathname.startsWith("/dashboard") || pathname.startsWith("/editor");
   const isAuthRoute = pathname === "/login" || pathname === "/registro";
 
+  // Si no está logueado y quiere entrar a una ruta protegida
   if (isProtectedRoute && !user) {
     const url = req.nextUrl.clone();
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
+  // Si ya está logueado y quiere ir a login o registro
   if (isAuthRoute && user) {
     const url = req.nextUrl.clone();
     url.pathname = "/dashboard";
