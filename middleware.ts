@@ -1,74 +1,50 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-export async function middleware(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({ request });
-
+export async function middleware(req: NextRequest) {
+  const res = NextResponse.next();
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll() {
-          return request.cookies.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            request.cookies.set(name, value)
-          );
-          supabaseResponse = NextResponse.next({ request });
-          cookiesToSet.forEach(({ name, value, options }) =>
-            supabaseResponse.cookies.set(name, value, options)
-          );
-        },
+        getAll: () => req.cookies.getAll(),
+        setAll: (all) =>
+          all.forEach(({ name, value, options }) =>
+            res.cookies.set(name, value, options)
+          ),
       },
     }
   );
 
-  // Refresca la sesión si existe
-  await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
+  const { pathname } = req.nextUrl;
 
-  const { pathname } = request.nextUrl;
-
-  // 1. Rutas que requieren estar logueado
+  // Rutas que requieren estar logueado (Dashboard, Editor, Admin)
   const isProtectedRoute = 
     pathname.startsWith("/dashboard") || 
     pathname.startsWith("/editor") || 
     pathname.startsWith("/admin");
 
-  // 2. Rutas de autenticación
   const isAuthRoute = pathname === "/login" || pathname === "/registro";
 
-  if (isProtectedRoute) {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/login";
-      return NextResponse.redirect(url);
-    }
+  // Si no está logueado y quiere entrar a una ruta protegida
+  if (isProtectedRoute && !user) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
   }
 
-  if (isAuthRoute) {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/dashboard";
-      return NextResponse.redirect(url);
-    }
+  // Si ya está logueado y quiere ir a login o registro
+  if (isAuthRoute && user) {
+    const url = req.nextUrl.clone();
+    url.pathname = "/dashboard";
+    return NextResponse.redirect(url);
   }
 
-  return supabaseResponse;
+  return res;
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Coincide con todas las rutas de solicitud excepto las que comienzan con:
-     * - _next/static (archivos estáticos)
-     * - _next/image (archivos de optimización de imágenes)
-     * - favicon.ico (archivo de favicon)
-     * - Archivos de imagen (svg, png, jpg, jpeg, gif, webp)
-     */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ],
+  matcher: ["/dashboard/:path*", "/editor/:path*", "/admin/:path*", "/login", "/registro"],
 };
